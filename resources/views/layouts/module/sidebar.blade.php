@@ -3,7 +3,7 @@
     <a href="./" class="brand-link bg-info">
         <img src="{{ asset('dist/img/icon-pkm.png') }}" alt="SIRM" class="brand-image img-circle elevation-3"
             style="opacity: .8">
-        <span class="brand-text font-weight-light">SIRM</span>
+        <span class="brand-text font-weight-light">APOTEK SEHATI</span>
     </a>
 
     <!-- Sidebar -->
@@ -30,12 +30,7 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
-                    <a href="{{ route('pasien.index') }}" class="nav-link">
-                        <i class="fa fa-wheelchair nav-icon"></i>
-                        <p>Pasien</p>
-                    </a>
-                </li>
+
 
                 <li class="nav-item">
                     <a href="{{ route('pasien.index', 100) }}" class="nav-link">
@@ -49,12 +44,12 @@
                         <p>Pemeriksaan</p>
                     </a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fa fa-history"></i>
                         <p>History</p>
                     </a>
-                </li>
+                </li> --}}
 
                 <li class="nav-item">
                     <a href="{{ route('laporan.index') }}" class="nav-link">
@@ -62,7 +57,7 @@
                         <p>Laporan</p>
                     </a>
                 </li>
-   
+
                 <li class="nav-header">Master Data</li>
                 <li class="nav-item">
                     <a href="{{ route('dokter.index') }}" class="nav-link">
@@ -70,12 +65,19 @@
                         <p>Dokter</p>
                     </a>
                 </li>
+
                 <li class="nav-item">
+                    <a href="{{ route('pasien.index') }}" class="nav-link">
+                        <i class="fa fa-wheelchair nav-icon"></i>
+                        <p>Pasien</p>
+                    </a>
+                </li>
+                {{-- <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="fa fa-user nav-icon"></i>
                         <p>Users</p>
                     </a>
-                </li>
+                </li> --}}
 
             </ul>
         </nav>

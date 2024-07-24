@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use DataTables;
 use DB;
 use App\Medical_rec;
+use App\Kunjungan;
 use Illuminate\Support\Facades\URL;
 
 class DiagnosaController extends Controller
@@ -79,24 +80,26 @@ class DiagnosaController extends Controller
     public function show($id)
     {
         $pasien = DB::table('kunjungan as k')
-                    ->leftjoin('pasien as p', 'k.id_pasien', '=', 'p.id')
-                    ->leftjoin('poli as po', 'k.id_poli', '=', 'po.id')
-                    ->leftjoin('pasien_tp as tipe', 'k.id_pasien_tp', '=', 'tipe.id')
-                    ->leftjoin('gender as g', 'p.id_gender', '=', 'g.id')
-                    ->leftjoin('pekerjaan as job', 'p.id_pekerjaan', '=', 'job.id')
-                    ->leftjoin('pendidikan as edu', 'p.id_pendidikan', '=', 'edu.id')
-                    ->select('k.id as id_kunjungan',
-                             'p.id as id_pasien',
-                             'k.tgl_daftar',
-                             'p.no_rm as pasien_no_rm',
-                             'p.nama as pasien_nm',
-                             'g.detail_gender as jk',
-                             'p.tgl_lahir as tgl_lahir',
-                             'p.usia',
-                             'p.alamat',
-                             'p.no_telp',
-                             'job.nama as job')
-                    ->where('k.id', $id)->first();
+            ->leftjoin('pasien as p', 'k.id_pasien', '=', 'p.id')
+            ->leftjoin('poli as po', 'k.id_poli', '=', 'po.id')
+            ->leftjoin('pasien_tp as tipe', 'k.id_pasien_tp', '=', 'tipe.id')
+            ->leftjoin('gender as g', 'p.id_gender', '=', 'g.id')
+            ->leftjoin('pekerjaan as job', 'p.id_pekerjaan', '=', 'job.id')
+            ->leftjoin('pendidikan as edu', 'p.id_pendidikan', '=', 'edu.id')
+            ->select(
+                'k.id as id_kunjungan',
+                'p.id as id_pasien',
+                'k.tgl_daftar',
+                'p.no_rm as pasien_no_rm',
+                'p.nama as pasien_nm',
+                'g.detail_gender as jk',
+                'p.tgl_lahir as tgl_lahir',
+                'p.usia',
+                'p.alamat',
+                'p.no_telp',
+                'job.nama as job'
+            )
+            ->where('k.id', $id)->first();
         return view('pemeriksaan.diagnosa', compact('pasien'));
     }
 
@@ -131,28 +134,32 @@ class DiagnosaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $kunjungan = Kunjungan::findOrFail($id);
+        $kunjungan->delete();
     }
 
-    public function tblDiagnosa($id){
+    public function tblDiagnosa($id)
+    {
         // $id = \Request::segment(2);
         $model = DB::table('medical_recs as mr')
-                ->leftjoin('kunjungan as k', 'mr.id_kunjungan', '=', 'k.id')
-                ->leftjoin('pasien as p', 'k.id_pasien', '=', 'p.id')
-                ->select('mr.id',
-                         'mr.id_kunjungan',
-                         'mr.tgl_periksa',
-                         'mr.diagnosa_1',
-                         'mr.icd_1',
-                         'mr.diagnosa_2',
-                         'mr.icd_2',
-                         'mr.created_at')
-                ->where('mr.id_kunjungan', $id)
-                ->orderby('created_at', 'DESC')->get();
+            ->leftjoin('kunjungan as k', 'mr.id_kunjungan', '=', 'k.id')
+            ->leftjoin('pasien as p', 'k.id_pasien', '=', 'p.id')
+            ->select(
+                'mr.id',
+                'mr.id_kunjungan',
+                'mr.tgl_periksa',
+                'mr.diagnosa_1',
+                'mr.icd_1',
+                'mr.diagnosa_2',
+                'mr.icd_2',
+                'mr.created_at'
+            )
+            ->where('mr.id_kunjungan', $id)
+            ->orderby('created_at', 'DESC')->get();
         //dd($id);
-        
+
         return Datatables::of($model)
-        ->addColumn('action', function($model){
+            ->addColumn('action', function ($model) {
                 return view('pemeriksaan.action_diagnosa', [
                     'model' => $model,
                     'url_show' => route('diagnosa.show', $model->id),
@@ -163,7 +170,5 @@ class DiagnosaController extends Controller
             ->addIndexColumn()
             ->rawColumns(['action'])
             ->make(true);
-
     }
-
 }
