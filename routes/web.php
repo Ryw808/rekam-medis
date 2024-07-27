@@ -34,6 +34,8 @@ Route::get('/tabel/pemeriksaan', 'PemeriksaanController@tblpemeriksaan')->name('
 
 Route::resource('/diagnosa', 'DiagnosaController');
 Route::get('/diagnosa/{id}/get', 'DiagnosaController@tblDiagnosa')->name('tabel.diagnosa');
+Route::get('/print_diagnosa', 'DiagnosaController@print_diagnosa')->name('print.diagnosa');
+
 
 Route::get('/laporan', 'LaporanController@index')->name('laporan.index');
 Route::get('/laporan/kunjungan', 'LaporanController@kunjungan')->name('laporan.kunjungan');

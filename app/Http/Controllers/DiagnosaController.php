@@ -171,4 +171,30 @@ class DiagnosaController extends Controller
             ->rawColumns(['action'])
             ->make(true);
     }
+
+    public function print_diagnosa(){
+        $id = \Request::segment(2);
+        $diagnosa_print = DB::table('medical_recs as mr')
+        ->join('kunjungan as k', 'mr.id_kunjungan', '=', 'k.id')
+        ->join('pasien as u', 'k.id_pasien', '=', 'u.id')
+        ->select(
+            'mr.id as medical_record_id',
+            'mr.tgl_periksa as tgl_periksa',
+            'mr.anamnesa as anamnesa',
+            'mr.diagnosa_1 as diagnosa_1',
+            'mr.icd_1 as icd_1',
+            'mr.diagnosa_2 as diagnosa_2',
+            'mr.icd_2 as icd_2',
+            'u.id as id_pasien',
+            'u.nama as nama',
+            'k.id as id_kunjungan',
+            'k.tgl_daftar as tgl_daftar'
+        )
+        ->orderBy('mr.tgl_periksa', 'ASC')
+        ->get();
+
+        $first = $diagnosa_print->first();
+        return view('pemeriksaan.print_diagnosa', compact('diagnosa_print', 'first'));
+    }
+    
 }
